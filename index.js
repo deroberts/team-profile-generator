@@ -36,11 +36,38 @@ const questions = async () => {
         },
         {
             type: 'list',
-            message: 'What is your position?',
-            name: 'position',
+            message: 'What is your title?',
+            name: 'role',
             choices: ['Manager', 'Engineer', 'Intern'],
         },
         ])
+        // now we need the questions specific to each role
+        if (answers.role === 'Engineer') {
+            const githubResponse = await inquirer.prompt([
+                {
+                    type: 'input',
+                    message: 'What is your github username?',
+                    name: 'github',
+        },
+        ])
+    
+    } else if (answers.role === 'Intern') {
+        const internResponse = await inquirer.prompt([
+            {
+                type: 'input',
+                message: 'Which school/university did you attend?',
+                name: 'school',
+            },
+        ])
+    } else if (answers.role === 'Manager') {
+        const managerResponse = await inquirer.prompt([
+            {
+                type: 'input',
+                message: 'What is your office number?',
+                name: 'officeNumber',
+            },
+        ])
+    }
     };
 
 async function questionPrompts() {
@@ -52,3 +79,4 @@ questionPrompts();
 // mom's thanksgiving list: turkey, ham, mashed potatoes, gravy, dressing, stuffing, green bean cassarole,
 // mac and cheese, cheese dip, rolls, pumpkin pie, french silk pie.
 // jim is making whiskey balls.
+//try to get there by noon.
