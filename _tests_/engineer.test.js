@@ -1,4 +1,6 @@
-const Engineer = require('../lib/engineer.js');
+const Engineer = require('../lib/Engineer.js');
 
-test('I am not 100% certain what I am testing', () => {
-    const drone = new Engineer();))
+test('get Github account', () => {
+ expect(new Engineer('name', 'email', 'github').getGithub()).toBe('github')
+ //idk I'm tired.
+});

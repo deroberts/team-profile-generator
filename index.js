@@ -1,11 +1,12 @@
 // node modules to import
 const inquirer = require('inquirer');
 const fs = require('fs');
+const generateWorkers = require('./generate-workers.js');
 // require for the employee classes. Things I know I need anyways.
-const Employee = require('./lib/employee.js');
-const Engineer = require('./lib/engineer.js');
-const Intern = require('./lib/intern.js');
-const Manager = require('./lib/manager.js');
+const Employee = require('./lib/Employee.js');
+const Engineer = require('./lib/Engineer.js');
+const Intern = require('./lib/Intern.js');
+const Manager = require('./lib/Manager.js');
 
 // need an array for the employee input information
 const employeeInfo = [];
@@ -50,7 +51,15 @@ const questions = async () => {
                     name: 'github',
         },
         ])
-    
+    // add push to the employeeInfo array
+        const newEngineer = new Engineer(
+            answers.name,
+            answers.id,
+            answers.email,
+            githubResponse.github
+        );
+        employeeInfo.push(newEngineer);
+
     } else if (answers.role === 'Intern') {
         const internResponse = await inquirer.prompt([
             {
@@ -59,6 +68,13 @@ const questions = async () => {
                 name: 'school',
             },
         ])
+        const newIntern = new Intern(
+            answers.name,
+            answers.id,
+            answers.email,
+            internResponse.school
+        );
+
     } else if (answers.role === 'Manager') {
         const managerResponse = await inquirer.prompt([
             {
@@ -67,14 +83,42 @@ const questions = async () => {
                 name: 'officeNumber',
             },
         ])
+        const newManager = new Manager(
+            answers.name,
+            answers.id,
+            answers.email,
+            managerResponse.officeNumber
+        );
     }
     };
+    // now we need to ask if they want to add another employee
+    async function questionPrompts() {
+        await questions()
+        
+    const newMember = await inquirer.prompt([
+        {
+            name: 'newMember',
+            type: 'list',
+            message: 'Would you like to add another team member?',
+        },
+    ])
+    
+    if (newMember.newMember === 'Yes') {
+        questionPrompts()
+    } 
+        return saveTeam();
 
-async function questionPrompts() {
-    await questions()
-}
+    }
 
-questionPrompts();
+    questionPrompts();
+    //need to generate the html file
+    function saveTeam() {
+        fs.writeFileSync('dist\index.html', createHTML(employeeInfo), 'utf-8');
+
+        
+       //need to add the html template
+    }
+
 
 // mom's thanksgiving list: turkey, ham, mashed potatoes, gravy, dressing, stuffing, green bean cassarole,
 // mac and cheese, cheese dip, rolls, pumpkin pie, french silk pie.
